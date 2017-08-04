@@ -9,6 +9,11 @@ namespace App;
 
 class Config {
 	/**
+	 * APP Name
+	 * @var string
+	 */
+	const APP_NAME = 'MVC Framework';
+	/**
 	 * DB host
 	 * @var string
 	 */
@@ -17,7 +22,7 @@ class Config {
 	 *DB name
 	 * @var string
 	 */
-	const DB_NAME = 'pr_beejee';
+	const DB_NAME = 'pr_testdb';
 	
 	/**
 	 * DB user

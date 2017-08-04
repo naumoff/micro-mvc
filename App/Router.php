@@ -5,7 +5,7 @@
 $router = new Core\Router();
 
 // add routes section $routerObject->addRoute($url,$params)
-
+$router->addRoute('', ['controller'=>'Home','action'=>'index']);
 
 /*
 	// precise patterns
