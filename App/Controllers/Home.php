@@ -5,6 +5,7 @@
 
 namespace App\Controllers;
 
+use \App\Helpers;
 use \Core\View;
 
 /**
@@ -14,14 +15,18 @@ use \Core\View;
 
 class Home extends \Core\Controller
 {
+	use Helpers\ProcessInput;
+	
 	#region Properties
 	// if country is not in the list - default advertiser will be selected
 	private $defaultAdvertiser;
-	// if no category, or wrong category provided - default category will be selected
-	private $defaultCategory;
 	private $countryAdvertisers;
-	private $advertiserLinks;
 	private $countryCode;
+	private $categories;
+	private $streamingLink;
+	private $betLink;
+	private $topMenuLinks;
+	
 	#endregion
 	
 	public function __construct($route_params = NULL) {
@@ -29,65 +34,26 @@ class Home extends \Core\Controller
 		
 		$this->defaultAdvertiser = 'Advertiser1';
 		
-		$this->defaultCategory = 'soccer';
-		
 		$this->countryAdvertisers = [
 			'us' => 'Advertiser1',
 			'uk' => 'Advertiser2',
 			'ca' => 'Advertiser3',
 		];
 		
-		$this->advertiserLinks = [
-			'Advertiser1' => [
-				'soccer' => [
-					'link1'=>'http://advertiser1/soccer/bet/?t=[TITLE]',
-					'link2'=>'http://advertiser1/soccer/video/?t=[TITLE]',
-				],
-				'tennis' => [
-					'link1'=>'http://advertiser1/tennis/bet/?t=[TITLE]',
-					'link2'=>'http://advertiser1/tennis/video/?t=[TITLE]',
-				],
-				'hockey' => [
-					'link1'=>'http://advertiser1/hockey/bet/?t=[TITLE]',
-					'link2'=>'http://advertiser1/hockey/video/?t=[TITLE]',
-				],
-				
-				'box' => [
-					'link1'=>'http://advertiser1/box/bet/?t=[TITLE]',
-					'link2'=>'http://advertiser1/box/video/?t=[TITLE]',
-				]
-			],
-			'Advertiser2' => [
-				'soccer' => [
-					'link1'=>'http://advertiser2/soccer/bet/?t=[TITLE]',
-					'link2'=>'http://advertiser2/soccer/video/?t=[TITLE]',
-				],
-				'tennis' => [
-					'link1'=>'http://advertiser2/tennis/bet/?t=[TITLE]',
-					'link2'=>'http://advertiser2/tennis/video/?t=[TITLE]',
-				],
-				'hockey' => [
-					'link1'=>'http://advertiser2/hockey/bet/?t=[TITLE]',
-					'link2'=>'http://advertiser2/hockey/video/?t=[TITLE]',
-				],
-			],
-			'Advertiser3' => [
-				'soccer' => [
-					'link1'=>'http://advertiser3/soccer/bet/?t=[TITLE]',
-					'link2'=>'http://advertiser3/soccer/video/?t=[TITLE]',
-				],
-				'tennis' => [
-					'link1'=>'http://advertiser3/tennis/bet/?t=[TITLE]',
-					'link2'=>'http://advertiser3/tennis/video/?t=[TITLE]',
-				],
-				'hockey' => [
-					'link1'=>'http://advertiser3/hockey/bet/?t=[TITLE]',
-					'link2'=>'http://advertiser3/hockey/video/?t=[TITLE]',
-				],
-			],
+		$this->categories = [
+			'box',
+			'hockey',
+			'football',
+			'tennis'
 		];
 		
-		$this->countryCode = 'us';
+		$this->topMenuLinks = $this->getTopMenuLinks();
+		
+		$this->streamingLink = 'http://streaming.com';
+		
+		$this->betLink = 'http://bet.com';
+		
+		$this->countryCode = 'ca';
 	}
 	
 	#region Main Methods
@@ -95,28 +61,26 @@ class Home extends \Core\Controller
 	 * Show index page for Home controller.
 	 * @return void
 	 */
-	public function indexAction()
-	{
-		$title = $_REQUEST['t'];
-		
-		$category = $this->validateCategory($_REQUEST['c']);
-		
-		if($category == false){
-			$category = $this->defaultCategory;
-		}
+	public function indexAction() {
 		
 		$currentAdvertiser = $this->advertiserSelection($this->countryCode);
 		
-		if(isset($this->advertiserLinks[$currentAdvertiser][$category])){
-			$topMenuLinks = $this->getMenuLinksForPreciseAdvertiser($currentAdvertiser);
-			$links = $this->advertiserLinks[$currentAdvertiser][$category];
-			$links = $this->addTitleToLink($links, $title);
-			View::render('.home.index',[
-				'buttonLinks'=> $links,
-				'menuLinks'=>$topMenuLinks]);
+		$title = $_REQUEST['t'];
+		
+		$category = $this->validateCategory($_REQUEST['c']);
+
+		
+		if ($category === FALSE && $title === FALSE) {
+			// load default view with no active top menu link
+			$this->viewPage('home.advertisers.default');
+		}elseif ($category !== FALSE && $title === FALSE){
+			// load default view with active top menu link
+			$this->viewPage('home.advertisers.default');
 		}else{
-			$this->redirectToIndexWithNoTitleAndDefaultCategory();
+			// load top menu link with title - advertiser page
+			$this->viewPage("home.advertisers.{$currentAdvertiser}");
 		}
+
 
 	}
 	#endregion
@@ -124,13 +88,13 @@ class Home extends \Core\Controller
 	#region Service Mathod
 	private function validateCategory($requestCategory)
 	{
-		foreach ($this->advertiserLinks AS $advertiser=>$linksArray)
-		{
-			if(array_key_exists($requestCategory,$linksArray)){
-				return $requestCategory;
-			}
+		if($requestCategory === false){
+			return false;
+		}elseif (in_array($requestCategory, $this->categories)){
+			return $requestCategory;
+		}else{
+			return false;
 		}
-		return false;
 	}
 	
 	private function advertiserSelection($userCountryCode)
@@ -144,6 +108,30 @@ class Home extends \Core\Controller
 		return $this->defaultAdvertiser;
 	}
 	
+	private function getTopMenuLinks()
+	{
+		if(isset($this->categories)){
+			$topMenuLinks = [];
+			foreach ($this->categories AS $category){
+				$topMenuLinks[$category] = $category;
+			}
+			return $topMenuLinks;
+		}else{
+			return false;
+		}
+	}
+	
+	private function viewPage($path,$data = null)
+	{
+		View::render($path,[
+			'buttonLinks'=> [
+				'bet' => $this->betLink,
+				'watch' => $this->streamingLink
+			],
+			'menuLinks'=>$this->topMenuLinks,
+			'data'=>$data]);
+	}
+	
 	private function addTitleToLink($links, $title)
 	{
 		foreach ($links AS $key=>$link)
@@ -153,19 +141,6 @@ class Home extends \Core\Controller
 		return $links;
 	}
 	
-	private function getMenuLinksForPreciseAdvertiser($currentAdvertiser)
-	{
-		if(isset($this->advertiserLinks[$currentAdvertiser])){
-			return array_keys($this->advertiserLinks[$currentAdvertiser]);
-		}
-	}
-	
-	private function redirectToIndexWithNoTitleAndDefaultCategory()
-	{
-		header("Location: /");
-		die();
-	}
-	
 	/**
 	 * Before filter.
 	 * @return void
@@ -173,11 +148,15 @@ class Home extends \Core\Controller
 	protected function before()
 	{
 		if(!isset($_REQUEST['t'])){
-			$_REQUEST['t'] = null;
+			$_REQUEST['t'] = false;
+		}else{
+			$_REQUEST['t'] = $this->processString($_REQUEST['t']);
 		}
 		
 		if(!isset($_REQUEST['c'])){
-			$_REQUEST['c'] = $this->defaultCategory;
+			$_REQUEST['c'] = false;
+		}else{
+			$_REQUEST['c'] = $this->processString($_REQUEST['c']);
 		}
 	}
 	
