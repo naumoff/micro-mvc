@@ -49,9 +49,9 @@ class Home extends \Core\Controller
 		
 		$this->topMenuLinks = $this->getTopMenuLinks();
 		
-		$this->streamingLink = 'http://streaming.com';
+		$this->streamingLink = 'http://streaming.com/?t=[TITLE]&c=[CATEGORY]';
 		
-		$this->betLink = 'http://bet.com';
+		$this->betLink = 'http://bet.com/?t=[TITLE]&c=[CATEGORY]';
 		
 		$this->countryCode = 'ca';
 	}
@@ -72,16 +72,23 @@ class Home extends \Core\Controller
 		
 		if ($category === FALSE && $title === FALSE) {
 			// load default view with no active top menu link
-			$this->viewPage('home.advertisers.default');
+			$data = [
+				'title'=>"Watch last sport events and bet on sport matches"
+			];
+			$this->viewPage('home.advertisers.default',$data);
 		}elseif ($category !== FALSE && $title === FALSE){
 			// load default view with active top menu link
-			$this->viewPage('home.advertisers.default');
+			$data = [
+				'title'=>"Watch and bet on last $category events"
+			];
+			$this->viewPage('home.advertisers.default',$data);
 		}else{
 			// load top menu link with title - advertiser page
-			$this->viewPage("home.advertisers.{$currentAdvertiser}");
+			$data = [
+				'title'=>$title
+			];
+			$this->viewPage("home.advertisers.{$currentAdvertiser}",$data);
 		}
-
-
 	}
 	#endregion
 	
@@ -132,15 +139,6 @@ class Home extends \Core\Controller
 			'data'=>$data]);
 	}
 	
-	private function addTitleToLink($links, $title)
-	{
-		foreach ($links AS $key=>$link)
-		{
-			$links[$key] = str_replace('[TITLE]',$title,$link);
-		}
-		return $links;
-	}
-	
 	/**
 	 * Before filter.
 	 * @return void
@@ -158,16 +156,21 @@ class Home extends \Core\Controller
 		}else{
 			$_REQUEST['c'] = $this->processString($_REQUEST['c']);
 		}
+
+		$this->betLink = str_replace('[CATEGORY]', $_REQUEST['c'], $this->betLink);
+		
+		$this->betLink = str_replace( '[TITLE]', $_REQUEST['t'], 	$this->betLink);
+		
+		$this->streamingLink = str_replace('[CATEGORY]', $_REQUEST['c'], $this->streamingLink);
+		
+		$this->streamingLink = str_replace('[TITLE]', $_REQUEST['t'], $this->streamingLink);
 	}
 	
 	/**
 	 * After filter
 	 * @return void
 	 */
-	protected function after()
-	{
-	
-	}
+	protected function after(){}
 	
 	#endregion
 }

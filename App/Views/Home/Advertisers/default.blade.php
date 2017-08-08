@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-lg-2"></div>
             <div class="col-lg-8">
-                <h1 style="text-align: center">default</h1>
+                <h1 style="text-align: center">{{$data['title']}}</h1>
             </div>
             <div class="col-lg-2"></div>
         </div>
