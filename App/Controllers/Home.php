@@ -73,21 +73,30 @@ class Home extends \Core\Controller
 		if ($category === FALSE && $title === FALSE) {
 			// load default view with no active top menu link
 			$data = [
-				'title'=>"Watch last sport events and bet on sport matches"
+				'title'=>false,
+				'category'=>false,
+				'advertiser'=>$currentAdvertiser,
+				'country'=>$this->countryCode
 			];
-			$this->viewPage('home.advertisers.default',$data);
+			$this->viewPage('default',$data);
 		}elseif ($category !== FALSE && $title === FALSE){
 			// load default view with active top menu link
 			$data = [
-				'title'=>"Watch and bet on last $category events"
+				'title'=>false,
+				'category'=>$category,
+				'advertiser'=>$currentAdvertiser,
+				'country'=>$this->countryCode
 			];
-			$this->viewPage('home.advertisers.default',$data);
+			$this->viewPage('default',$data);
 		}else{
 			// load top menu link with title - advertiser page
 			$data = [
-				'title'=>$title
+				'title'=>$title,
+				'category'=>$category,
+				'advertiser'=>$currentAdvertiser,
+				'country'=>$this->countryCode
 			];
-			$this->viewPage("home.advertisers.{$currentAdvertiser}",$data);
+			$this->viewPage("page",$data);
 		}
 	}
 	#endregion
