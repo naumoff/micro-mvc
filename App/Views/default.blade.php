@@ -5,8 +5,8 @@
         <div class="row">
             <div class="col-lg-2"></div>
             <div class="col-lg-8">
-                @if( $data['category'] !== false )
-                    <h1 style="text-align: center">Watch and bet any {{$data['category']}} events</h1>
+                @if( $data['title'] !== false )
+                    <h1 style="text-align: center">{{$data['title']}}</h1>
                 @else
                     <h1 style="text-align: center">Watch and bet any sport events</h1>
                 @endif

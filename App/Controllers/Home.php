@@ -65,38 +65,31 @@ class Home extends \Core\Controller
 		
 		$currentAdvertiser = $this->advertiserSelection($this->countryCode);
 		
-		$title = $_REQUEST['t'];
+		$title = isset($_REQUEST['t']) ? $_REQUEST['t'] : false;
 		
 		$category = $this->validateCategory($_REQUEST['c']);
 
 		
-		if ($category === FALSE && $title === FALSE) {
+		if ($category === FALSE) {
+			
 			// load default view with no active top menu link
 			$data = [
-				'title'=>false,
+				'title'=>$title,
 				'category'=>false,
 				'advertiser'=>$currentAdvertiser,
 				'country'=>$this->countryCode
 			];
 			$this->viewPage('default',$data);
-		}elseif ($category !== FALSE && $title === FALSE){
-			// load default view with active top menu link
+		} else {
+
 			$data = [
-				'title'=>false,
-				'category'=>$category,
+				'title'=> $title,
+				'category'=> $category,
 				'advertiser'=>$currentAdvertiser,
 				'country'=>$this->countryCode
 			];
-			$this->viewPage('default',$data);
-		}else{
-			// load top menu link with title - advertiser page
-			$data = [
-				'title'=>$title,
-				'category'=>$category,
-				'advertiser'=>$currentAdvertiser,
-				'country'=>$this->countryCode
-			];
-			$this->viewPage("page",$data);
+			$this->viewPage('page',$data);
+			
 		}
 	}
 	#endregion
