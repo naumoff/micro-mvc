@@ -31,22 +31,34 @@
            	    	name:'',
                     mail:'',
                     password:''
-                }
+                },
+               success:'',
+               errors:''
            },
+	       http: {
+		       emulateJSON: true,
+		       emulateHTTP: true
+	       },
            methods:{
-           	    submitFormOne(){
-                    alert('submit');
-	                axios.post('/projects',{
-		                name:this.name,
-		                description:this.description
-	                }).then((response)=>{
-		                this.success = response.data;
-		                this.name = ''; //очистит форму в случае успеха
-		                this.description = ''; //очистит форму в случае успеха
-	                }).catch((error)=>{
-		                //error.response.data - доступ к ошибкам со стороны сервера
-		                this.errors = error.response.data.errors;
-	                });
+                submitFormOne(){
+	                this.$http.post('/form-one/submit',
+                        {
+                        	name:this.user.name,
+		                    mail:this.user.mail,
+		                    password:this.user.password
+                        }
+                    ).then(
+		                //1st call back is returning response data
+		                (response)=>{
+			                console.log('ok');
+			                console.log(response);
+		                },
+		                //2nd call back is returning errors if occurred
+		                (errors)=>{
+			                console.log('problems');
+			                console.log(errors)
+		                }
+	                )
                 }
            }
        })

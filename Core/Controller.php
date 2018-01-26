@@ -5,6 +5,8 @@
 
 namespace Core;
 
+use Core\Validator;
+
 /**
  * Class Controller
  * @package Core
@@ -53,6 +55,15 @@ abstract class Controller
 			throw new \Exception("Method {$method} not found in controller ". get_class($this));
 		}
 	}
+    
+    /**
+     * function returns instance of Validator with multiple methods to validate user's input
+     * @return \Core\Validator
+     */
+	protected function validator(){
+        $validator = new Validator();
+        return $validator;
+    }
 	
 	/**
 	 * Before filter - called before an action method.
@@ -71,13 +82,5 @@ abstract class Controller
 	 */
 	protected function after()
 	{
-	}
-	
-	protected static function validate($data)
-	{
-		$data = trim($data);
-		$data = stripcslashes($data);
-		$data = htmlspecialchars($data);
-		return $data;
 	}
 }

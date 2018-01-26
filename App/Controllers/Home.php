@@ -7,6 +7,7 @@ namespace App\Controllers;
 
 use \App\Helpers;
 use \Core\View;
+use Core\Validator;
 
 /**
  * Class Home
@@ -15,8 +16,6 @@ use \Core\View;
 
 class Home extends \Core\Controller
 {
-	use Helpers\ProcessInput;
-	
 	#region Properties
     #endregion
 	
@@ -25,10 +24,6 @@ class Home extends \Core\Controller
 	}
 	
 	#region Main Methods
-	/**
-	 * Show index page for Home controller.
-	 * @return void
-	 */
 	public function indexAction()
     {
         View::render('home.index',[]);
@@ -37,11 +32,6 @@ class Home extends \Core\Controller
 	public function firstFormAction()
     {
         View::render('home.first-form');
-    }
-    
-    public function submitFirstFormAction(){
-	    echo "<pre>";
-	    print_r($_POST);
     }
     
     public function firstFormPost()
@@ -60,6 +50,16 @@ class Home extends \Core\Controller
     }
 	#endregion
 	
+    #region AJAX METHODS
+    public function submitFirstFormAction(){
+	    $this->validator()->validate([
+	        'name'=>['required'],
+            'mail'=>['required'],
+            'password'=>['required']
+        ]);
+    }
+    #endregion
+    
     #region SERVICE METHODS
 	/**
 	 * Before filter.

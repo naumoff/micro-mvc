@@ -11,7 +11,8 @@
     <!--подключили фреймворк vue.js-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.3/vue.js"></script>
 
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    {{--<script src="https://unpkg.com/axios/dist/axios.min.js"></script>--}}
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.5"></script>
 </head>
 <body>
     @include('header')
