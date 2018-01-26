@@ -39,9 +39,14 @@ class Home extends \Core\Controller
         View::render('home.first-form');
     }
     
+    public function submitFirstFormAction(){
+	    echo "<pre>";
+	    print_r($_POST);
+    }
+    
     public function firstFormPost()
     {
-        
+    
     }
     
     public function secondFormAction()
