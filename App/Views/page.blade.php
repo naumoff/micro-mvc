@@ -1,39 +1,26 @@
-@extends('master')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
 
-@section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-2"></div>
-            <div class="col-lg-8">
-                @if($data['title'] == false)
-                    <h1 style="text-align: center">default title</h1>
-                @else
-                    <h1 style="text-align: center">{{$data['title']}}</h1>
-                @endif
-            </div>
-            <div class="col-lg-2"></div>
-        </div>
-        <div class="row">
-            <div class="col-lg-2"></div>
-            <div class="col-lg-4">
-                <a href="{{$buttonLinks['bet']}}"
-                   class="btn btn-info"
-                   role="button">
-                    BET
-                </a>
-            </div>
-            <div class="col-lg-4">
-                <a href="{{$buttonLinks['watch']}}"
-                   class="btn btn-info"
-                   role="button">
-                    WATCH
-                </a>
-            </div>
-            <div class="col-lg-2"></div>
-        </div>
-    </div>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    @if($data['advertiser'] !== null)
-        @includeIf("advertiser_content.".$data['advertiser'])
-    @endif
-@endsection
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+    @include('header')
+    @yield('content')
+    @include('footer')
+</body>
+</html>

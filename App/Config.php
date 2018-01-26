@@ -22,7 +22,7 @@ class Config {
 	 *DB name
 	 * @var string
 	 */
-	const DB_NAME = 'pr_testdb';
+	const DB_NAME = 'pb_mvc';
 	
 	/**
 	 * DB user

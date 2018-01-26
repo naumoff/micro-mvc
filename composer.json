@@ -10,9 +10,6 @@
     }
   ],
   "require": {
-    "twbs/bootstrap": "4.0.0-alpha.6",
-    "components/jquery": "^3.2",
-    "components/jqueryui": "^1.12",
     "philo/laravel-blade": "3.*",
     "symfony/console": "^3.3"
   },

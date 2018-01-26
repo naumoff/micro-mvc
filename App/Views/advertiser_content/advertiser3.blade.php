@@ -1,1 +1,0 @@
-<p>advertiser page</p>
