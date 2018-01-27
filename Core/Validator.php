@@ -8,8 +8,10 @@
 
 namespace Core;
 
+use Exception;
 
-class Validator extends Request {
+abstract class Validator extends Request
+{
     
     public $errors;
     
@@ -17,7 +19,8 @@ class Validator extends Request {
      * Input example:
      * [
      *    'name'=>['required','min:3', 'string'],
-     *    'email'=>['required', 'email']
+     *    'email'=>['required', 'email'],
+     *    'attempts'=>['between:1,15', required]
      * ]
      */
     public function validate(array $inputsAndRules)
@@ -27,23 +30,51 @@ class Validator extends Request {
         foreach ($inputsAndRules AS $input=>$rulesArray){
             //check if user's input exists in the rules array
             $this->checkInputExistence($input);
+            $this->validateTroughMethods($input, $rulesArray);
         }
     }
     
-    private function errorLog(array $inputError)
+    private function errorLog(string $input, string $error)
     {
-    
+        $this->errors[$input][] = $error;
     }
     
-    private function checkInputExistence($input)
+    private function checkInputExistence(string $input)
     {
         if(!array_key_exists($input, $this->inputs)){
-            echo "{$input} not found";
+            throw new Exception(
+                "Input {$input} was not found in Validator ". get_class($this)
+            );
         }
     }
     
-    private function required()
+    private function validateTroughMethods(string $input, array $rules)
     {
+        $class_methods = get_class_methods($this);
+        
+        foreach ($rules AS $rule){
+            $rule = explode(':', $rule);
+            if(!in_array($rule[0], $class_methods)){
+                throw new Exception(
+                    "Rule method {$rule[0]} was not found in Validator ". get_class($this)
+                );
+                //@todo complete logic of adding custom validators
+            }else{
+                $method = $rule[0];
+                $arguments = (isset($rule[1]))? $rule[1] : null;
     
+                if($arguments == null){
+                    $this->$method($input);
+                }else {
+                    $arguments = explode(',',$arguments);
+                    if(count($arguments)===1){
+                        $this->$method($input, $arguments[0]);
+                    }elseif (count($arguments)===2){
+                        $this->$method($input, $arguments[0],$arguments[1]);
+                    }
+                    
+                }
+            }
+        }
     }
 }

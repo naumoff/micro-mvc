@@ -5,8 +5,6 @@
 
 namespace Core;
 
-use Core\Validator;
-
 /**
  * Class Controller
  * @package Core
@@ -61,7 +59,7 @@ abstract class Controller
      * @return \Core\Validator
      */
 	protected function validator(){
-        $validator = new Validator();
+        $validator = new \App\Validators\Validator();
         return $validator;
     }
 	

@@ -53,9 +53,9 @@ class Home extends \Core\Controller
     #region AJAX METHODS
     public function submitFirstFormAction(){
 	    $this->validator()->validate([
-	        'name'=>['required'],
-            'mail'=>['required'],
-            'password'=>['required']
+	        'name'=>['between:10,15', 'required'],
+            'mail'=>['required', 'max:10'],
+            'password'=>['required', 'min:3']
         ]);
     }
     #endregion
