@@ -54,15 +54,6 @@ abstract class Controller
 		}
 	}
     
-    /**
-     * function returns instance of Validator with multiple methods to validate user's input
-     * @return \Core\Validator
-     */
-	protected function validator(){
-        $validator = new \App\Validators\Validator();
-        return $validator;
-    }
-	
 	/**
 	 * Before filter - called before an action method.
 	 * Need to be modified in each child controller

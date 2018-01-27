@@ -5,9 +5,9 @@
 
 namespace App\Controllers;
 
-use \App\Helpers;
+use App\Controllers\Helpers\MainValidator;
 use \Core\View;
-use Core\Validator;
+
 
 /**
  * Class Home
@@ -16,6 +16,9 @@ use Core\Validator;
 
 class Home extends \Core\Controller
 {
+    //attaches method validate() to get instance on core validator
+    use MainValidator;
+    
 	#region Properties
     #endregion
 	
@@ -57,6 +60,8 @@ class Home extends \Core\Controller
             'mail'=>['required', 'max:10'],
             'password'=>['required', 'min:3']
         ]);
+//        http_response_code(404);
+//        echo "problems";
     }
     #endregion
     

@@ -6,7 +6,7 @@
  * Time: 16:01
  */
 
-namespace Core;
+namespace Core\HTTP;
 
 
 abstract class Request {
