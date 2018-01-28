@@ -5,7 +5,7 @@
 
 namespace App\Controllers;
 
-use App\Controllers\Helpers\MainValidator;
+use App\Validators\MainValidator;
 use \Core\View;
 
 
@@ -16,9 +16,7 @@ use \Core\View;
 
 class Home extends \Core\Controller
 {
-    //attaches method validate() to get instance on core validator
-    use MainValidator;
-    
+ 
 	#region Properties
     #endregion
 	
@@ -55,13 +53,15 @@ class Home extends \Core\Controller
 	
     #region AJAX METHODS
     public function submitFirstFormAction(){
-	    $this->validator()->validate([
-	        'name'=>['between:10,15', 'required'],
-            'mail'=>['required', 'max:10'],
-            'password'=>['required', 'min:3']
+	    
+	    MainValidator::create()->validate([
+            'name'=>['required', 'minLength:3'],
+            'mail'=>['required', 'minLength:6'],
+            'password'=>['required', 'minLength:6']
         ]);
-//        http_response_code(404);
-//        echo "problems";
+	    
+	    //saving data to db, if validation succeed
+        //@todo complete DB recording
     }
     #endregion
     

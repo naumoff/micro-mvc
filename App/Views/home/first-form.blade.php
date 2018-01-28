@@ -5,20 +5,51 @@
         <div class="row">
             <h4>Form 1</h4>
             <p>The form below contains two input elements; one of type text and one of type password:</p>
-            <form v-on:submit.prevent="submitFormOne">
+            <div v-if="success.message" class="alert alert-success">
+                <p v-text="success.message"></p>
+            </div>
+            <form
+                    v-on:submit.prevent="submitFormOne"
+                    v-on:keydown="deleteErrorsForName($event.target.name)"
+            >
                 <div class="form-group">
                     <label for="user">Name:</label>
-                    <input type="text" class="form-control" id="user" v-model="user.name">
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="user"
+                            name="name"
+                            v-model="user.name">
                 </div>
+                <div  v-if="errors.name" class="alert alert-danger">
+                    <p v-for="error in errors.name" v-text="error"></p>
+                </div>
+
                 <div class="form-group">
                     <label for="email">Email:</label>
-                    <input type="email" class="form-control" id="email" v-model="user.mail">
+                    <input
+                            type="email"
+                            class="form-control"
+                            id="email"
+                            name="mail"
+                            v-model="user.mail">
+                </div>
+                <div  v-if="errors.mail" class="alert alert-danger">
+                    <p v-for="error in errors.mail" v-text="error"></p>
                 </div>
                 <div class="form-group">
                     <label for="pwd">Password:</label>
-                    <input type="password" class="form-control" id="pwd" v-model="user.password">
+                    <input
+                            type="password"
+                            class="form-control"
+                            id="pwd"
+                            name="password"
+                            v-model="user.password">
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <div  v-if="errors.password" class="alert alert-danger">
+                    <p v-for="error in errors.password" v-text="error"></p>
+                </div>
+                <button type="submit" class="btn btn-primary" v-bind:disabled="errorsExist()">Submit</button>
             </form>
         </div>
     </div>
@@ -32,8 +63,14 @@
                     mail:'',
                     password:''
                 },
-               success:'',
-               errors:''
+               success:{
+           	    	message:false
+               },
+               errors: {
+           	    	name:false,
+                    mail:false,
+                    password: false
+               }
            },
 	       http: {
 		       emulateJSON: true,
@@ -50,16 +87,58 @@
                     ).then(
 		                //1st call back is returning response data
 		                (response)=>{
-			                console.log('ok');
-			                console.log(response);
+			                this.success.message = 'Form submitted successfully';
+			                this.cleanErrors();
+			                this.cleanInput();
 		                },
 		                //2nd call back is returning errors if occurred
 		                (errors)=>{
-			                console.log('problems');
-			                console.log(errors)
+                            this.errors = errors.data;
+                            this.cleanSuccess();
 		                }
 	                )
-                }
+                },
+               cleanErrors(){
+                	this.errors = {
+		                name:false,
+		                mail:false,
+		                password: false
+                    }
+               },
+               deleteErrorsForName(nameInput){
+                	console.log(nameInput);
+                	if(this.errors[nameInput]){
+		                delete this.errors[nameInput];
+                    }
+               },
+               cleanSuccess(){
+                	this.success = {
+                		message: false
+                    }
+               },
+               cleanInput(){
+	               this.user = {
+                       name:'',
+			           mail:'',
+			           password:''
+	               }
+               },
+               errorsExist(){
+                	if((this.errors.name === false &&
+                        this.errors.mail === false &&
+                        this.errors.password === false) || this.errors.length === 0)
+                	{
+                		console.log(this.errors.name);
+                		console.log(this.errors.length);
+                		console.log('false');
+                		return false;
+                    }else{
+		                console.log(this.errors.name);
+		                console.log(this.errors);
+                		console.log('true');
+                		return true;
+                    }
+               }
            }
        })
     </script>

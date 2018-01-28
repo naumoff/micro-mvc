@@ -15,7 +15,7 @@ abstract class Validator extends Request {
     // all CORE validators here
     use CoreValidators;
     
-    public $errors;
+    public $errors = [];
     
     /**
      * Input example:
@@ -32,10 +32,6 @@ abstract class Validator extends Request {
             $this->validateTroughMethods($input, $rulesArray);
         }
         $this->response();
-    }
-    
-    protected function errorLog(string $input, string $error) {
-        $this->errors[$input][] = $error;
     }
     
     protected function checkInputExistence(string $input) {
@@ -73,6 +69,17 @@ abstract class Validator extends Request {
             }
         }
     }
-
+    
+    /**
+     * Methods recording all validations errors into $this->errors variable
+     * @param string $inputName
+     * @param string $message
+     */
+    protected function errorsLogger(string $inputName, string $message) {
+        $this->errors[$inputName][] = $message;
+    }
+    
+    abstract protected static function create();
+    
     abstract protected function response();
 }
