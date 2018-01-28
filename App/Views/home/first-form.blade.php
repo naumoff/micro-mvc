@@ -5,7 +5,7 @@
         <div class="row">
             <h4>Form 1</h4>
             <p>Presentation of Ajax requests validation on backend:</p>
-            <div v-if="success.message" class="alert alert-success">
+            <div v-if="success.message" v-bind:class="formSuccess">
                 <p v-text="success.message"></p>
             </div>
             <form
@@ -21,7 +21,7 @@
                             name="name"
                             v-model="user.name">
                 </div>
-                <div  v-if="errors.name" class="alert alert-danger">
+                <div  v-if="errors.name" v-bind:class="inputFailure">
                     <p v-for="error in errors.name" v-text="error"></p>
                 </div>
 
@@ -34,7 +34,7 @@
                             name="mail"
                             v-model="user.mail">
                 </div>
-                <div  v-if="errors.mail" class="alert alert-danger">
+                <div  v-if="errors.mail" v-bind:class="inputFailure">
                     <p v-for="error in errors.mail" v-text="error"></p>
                 </div>
                 <div class="form-group">
@@ -46,16 +46,20 @@
                             name="password"
                             v-model="user.password">
                 </div>
-                <div  v-if="errors.password" class="alert alert-danger">
+                <div  v-if="errors.password" v-bind:class="inputFailure">
                     <p v-for="error in errors.password" v-text="error"></p>
                 </div>
-                <button type="submit" class="btn btn-primary" v-bind:disabled="errorsExist()">Submit</button>
+                <button
+                        type="submit"
+                        class="btn btn-primary"
+                        v-bind:disabled="errorsExist()"
+                >Submit</button>
             </form>
         </div>
     </div>
     <hr>
     <script>
-       new Vue({
+       var app = new Vue({
            el: '#form1',
            data:{
            	    user: {
@@ -66,7 +70,9 @@
                success:{
            	    	message:false
                },
-               errors: {}
+               errors: {},
+               formSuccess:'alert alert-success',
+               inputFailure:'alert alert-danger'
            },
 	       http: {
 		       emulateJSON: true,
@@ -116,7 +122,6 @@
 	               }
                },
                errorsExist(){
-                	console.log(this.errors);
                 	if( this.errors.name ||
                         this.errors.mail ||
                         this.errors.password )

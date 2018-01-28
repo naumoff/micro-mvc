@@ -28,7 +28,7 @@ class Home extends \Core\Controller
 	#region Main Methods
 	public function indexAction()
     {
-        View::render('home.index',[]);
+        View::render('home.index');
 	}
 	
 	public function firstFormAction()

@@ -8,7 +8,11 @@
             @if($success !== false)
                 @include('includes.success-block')
             @endif
-            <form method="post" action="form-two/submit">
+            <form
+                    method="post"
+                    action="form-two/submit"
+                    v-on:keydown="deleteErrorsForName($event.target.name)"
+            >
                 <div class="form-group">
                     <label for="user">Name:</label>
                     <input
@@ -18,7 +22,7 @@
                             name="name"
                             v-model="user.name">
                 </div>
-                @if($errors['name'])
+                @if(isset($errors['name']))
                     <div  v-if="errors.name" class="alert alert-danger">
                         <p v-for="error in errors.name" v-text="error"></p>
                     </div>
@@ -32,7 +36,7 @@
                             name="mail"
                             v-model="user.mail">
                 </div>
-                @if($errors['mail'])
+                @if(isset($errors['mail']))
                     <div  v-if="errors.mail" class="alert alert-danger">
                         <p v-for="error in errors.mail" v-text="error"></p>
                     </div>
@@ -46,12 +50,16 @@
                             name="password"
                             v-model="user.password">
                 </div>
-                @if($errors['password'])
+                @if(isset($errors['password']))
                     <div  v-if="errors.password" class="alert alert-danger">
                         <p v-for="error in errors.password" v-text="error"></p>
                     </div>
                 @endif
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button
+                        type="submit"
+                        class="btn btn-primary"
+                        v-bind:disabled="errorsExist()"
+                >Submit</button>
             </form>
         </div>
     </div>
@@ -66,6 +74,23 @@
                     password:''
                 },
                 errors:{}
+            },
+            methods:{
+	            deleteErrorsForName(nameInput){
+		            if(this.errors[nameInput]){
+			            delete this.errors[nameInput];
+		            }
+	            },
+	            errorsExist(){
+		            if( this.errors.name ||
+		               this.errors.mail ||
+		               this.errors.password )
+		            {
+		               return true;
+		            }else{
+		               return false;
+		            }
+	            }
             },
             created(){
 				this.user = <?php echo json_encode($inputs); ?>;
