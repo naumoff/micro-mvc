@@ -4,7 +4,7 @@
     <div class="container" id="form1">
         <div class="row">
             <h4>Form 1</h4>
-            <p>The form below contains two input elements; one of type text and one of type password:</p>
+            <p>Presentation of Ajax requests validation on backend:</p>
             <div v-if="success.message" class="alert alert-success">
                 <p v-text="success.message"></p>
             </div>
@@ -66,11 +66,7 @@
                success:{
            	    	message:false
                },
-               errors: {
-           	    	name:false,
-                    mail:false,
-                    password: false
-               }
+               errors: {}
            },
 	       http: {
 		       emulateJSON: true,
@@ -99,11 +95,7 @@
 	                )
                 },
                cleanErrors(){
-                	this.errors = {
-		                name:false,
-		                mail:false,
-		                password: false
-                    }
+                	this.errors = {};
                },
                deleteErrorsForName(nameInput){
                 	console.log(nameInput);
@@ -124,19 +116,14 @@
 	               }
                },
                errorsExist(){
-                	if((this.errors.name === false &&
-                        this.errors.mail === false &&
-                        this.errors.password === false) || this.errors.length === 0)
+                	console.log(this.errors);
+                	if( this.errors.name ||
+                        this.errors.mail ||
+                        this.errors.password )
                 	{
-                		console.log(this.errors.name);
-                		console.log(this.errors.length);
-                		console.log('false');
-                		return false;
-                    }else{
-		                console.log(this.errors.name);
-		                console.log(this.errors);
-                		console.log('true');
                 		return true;
+                    }else{
+                		return false;
                     }
                }
            }

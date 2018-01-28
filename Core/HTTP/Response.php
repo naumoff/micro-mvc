@@ -11,7 +11,7 @@ namespace Core\HTTP;
 
 abstract class Response extends Validator
 {
-    // late static binding for object creation from classes in App\Validators
+    // late static binding for object creation from classes in App\RequestsHandler
     public static function create()
     {
         return new static();
@@ -20,12 +20,12 @@ abstract class Response extends Validator
     // responce generator
     protected function response() {
         if(count($this->errors)>0){
-            http_response_code(406);
-            echo json_encode($this->errors);
-            exit();
+            $this->errorsHandler();
         }else{
-            http_response_code(202);
+            $this->successHandler();
         }
     }
     
+    abstract protected function errorsHandler();
+    abstract protected function successHandler();
 }

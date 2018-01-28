@@ -5,7 +5,8 @@
 
 namespace App\Controllers;
 
-use App\Validators\MainValidator;
+use App\RequestsHandler\AjaxValidator;
+use App\RequestsHandler\FormValidator;
 use \Core\View;
 
 
@@ -35,26 +36,19 @@ class Home extends \Core\Controller
         View::render('home.first-form');
     }
     
-    public function firstFormPost()
-    {
-    
-    }
-    
     public function secondFormAction()
     {
-        View::render('home.second-form');
+        $data = $this->getFormDataFromSession();
+        $this->clearFormDataFromSession();
+        View::render('home.second-form', $data);
     }
-    
-    public function thirdFormAction()
-    {
-        View::render('home.third-form');
-    }
-	#endregion
+    #endregion
 	
-    #region AJAX METHODS
+    #region FORM HANDLERS
+    // ajax requests
     public function submitFirstFormAction(){
 	    
-	    MainValidator::create()->validate([
+	    AjaxValidator::create()->validate([
             'name'=>['required', 'minLength:3'],
             'mail'=>['required', 'minLength:6'],
             'password'=>['required', 'minLength:6']
@@ -63,14 +57,53 @@ class Home extends \Core\Controller
 	    //saving data to db, if validation succeed
         //@todo complete DB recording
     }
+    // standard post requests
+    public function submitSecondFormAction()
+    {
+        FormValidator::create()->validate([
+            'name'=>['required'],
+            'mail'=>['required'],
+            'password'=>['required']
+        ]);
+        
+        //saving data to db, if validation succeed
+        //@todo complete DB recording
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+    }
     #endregion
     
     #region SERVICE METHODS
+    private function getFormDataFromSession()
+    {
+        $data = [];
+        if(isset($_SESSION['errors'])){
+            $data['errors'] = $_SESSION['errors'];
+        }else{
+            $data['errors'] = false;
+        }
+        if(isset($_SESSION['inputs'])){
+            $data['inputs'] = $_SESSION['inputs'];
+        }else{
+            $data['inputs'] = false;
+        }
+        if(isset($_SESSION['success'])){
+            $data['success'] = 'Form submitted successfully!';
+        }else{
+            $data['success'] = false;
+        }
+        return $data;
+    }
+    private function clearFormDataFromSession()
+    {
+        unset($_SESSION['errors']);
+        unset($_SESSION['inputs']);
+        unset($_SESSION['success']);
+    }
 	/**
 	 * Before filter.
 	 * @return void
 	 */
-	protected function before() {}
+	protected function before(){}
 	
 	/**
 	 * After filter

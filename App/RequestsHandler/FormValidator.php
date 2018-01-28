@@ -6,16 +6,29 @@
  * Time: 17:19
  */
 
-namespace App\Validators;
+namespace App\RequestsHandler;
 
 use Core\HTTP\Response;
 
 /**
- * Class DBValidator can contain user-defined validators
- * @package App\Validators
+ * Class FormValidator can contain user-defined validators
+ * @package App\RequestsHandler
  */
-final class DBValidator extends Response
+final class FormValidator extends Response
 {
+    #region SERVICE METHODS
+    protected function errorsHandler() {
+        $_SESSION['errors']=$this->errors;
+        $_SESSION['inputs']=$this->inputs;
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+    }
+    
+    protected function successHandler() {
+        http_response_code(202);
+        $_SESSION['success']=true;
+    }
+    #enregion
+    
     /*
     //check condition that passed number value is between defined range
     protected function between($inputName, $min, $max)

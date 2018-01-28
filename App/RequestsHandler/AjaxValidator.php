@@ -6,16 +6,30 @@
  * Time: 19:30
  */
 
-namespace App\Validators;
+namespace App\RequestsHandler;
 
 use Core\HTTP;
 
 /**
- * Class MainValidator can contain user-defined validators
- * @package App\Validators
+ * Class AjaxValidator can contain user-defined validators
+ * @package App\RequestsHandler
  */
-final class MainValidator extends HTTP\Response
+final class AjaxValidator extends HTTP\Response
 {
+    #region SERVICE METHODS
+    protected function errorsHandler() {
+        http_response_code(406);
+        echo json_encode($this->errors);
+        exit();
+    }
+    
+    protected function successHandler() {
+        http_response_code(202);
+    }
+    #enregion
+    
+    #region CUSTOM VALIDATORS METHODS
+    
     /*
         //check condition that passed number value is between defined range
         protected function between($inputName, $min, $max)
@@ -32,4 +46,6 @@ final class MainValidator extends HTTP\Response
             }
         }
     */
+    
+    #endregion
 }

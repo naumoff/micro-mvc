@@ -13,9 +13,6 @@
             <li v-bind:class="{ active:formTwo }">
                 <a href="form-two">Form 2</a>
             </li>
-            <li v-bind:class="{ active:formThree }">
-                <a href="form-three">Form 3</a>
-            </li>
         </ul>
     </div>
 </nav>
@@ -28,7 +25,6 @@
             home:false,
             formOne:false,
             formTwo:false,
-            formThree:false
         },
         created(){
         	this.path = window.location.pathname;
@@ -38,8 +34,6 @@
         		this.formOne = true;
             }else if(this.path === '/form-two'){
         		this.formTwo = true;
-            }else if(this.path === '/form-three'){
-        		this.formThree = true;
             }
         }
     });
