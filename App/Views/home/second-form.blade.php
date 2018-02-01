@@ -13,6 +13,7 @@
                     action="form-two/submit"
                     v-on:keydown="deleteErrorsForName($event.target.name)"
             >
+                {!! $csrfInput !!}
                 <div class="form-group">
                     <label for="user">Name:</label>
                     <input

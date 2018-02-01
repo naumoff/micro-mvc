@@ -8,7 +8,7 @@
 
 namespace Core\HTTP;
 
-use Exception;
+use Core\HTTP\ValidatorException;
 use Core\HTTP\Validators\CoreValidators;
 
 abstract class Validator extends Request {
@@ -36,7 +36,7 @@ abstract class Validator extends Request {
     
     protected function checkInputExistence(string $input) {
         if (!array_key_exists($input, $this->inputs)) {
-            throw new Exception(
+            throw new ValidatorException(
                 "Input {$input} was not found in AjaxValidator " . get_class($this)
             );
         }
@@ -48,7 +48,7 @@ abstract class Validator extends Request {
         foreach ($rules AS $rule) {
             $rule = explode(':', $rule);
             if (!in_array($rule[0], $class_methods)) {
-                throw new Exception(
+                throw new ValidatorException(
                     "Rule method {$rule[0]} was not found in AjaxValidator " . get_class($this)
                 );
             } else {

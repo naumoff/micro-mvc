@@ -8,11 +8,23 @@
 
 namespace Core\HTTP\Validators;
 
+use Core\HTTP\ValidatorException;
 
 trait CoreValidators
 {
     
     #region CORE VALIDATORS
+    
+    //check csrf token
+    protected function csrf($inputName)
+    {
+        $inputValue = $this->inputs[$inputName];
+        if($inputValue !== $_SESSION['csrf']){
+            throw new ValidatorException(
+                "CSRF token violation!"
+            );
+        }
+    }
     
     //check user inputs and if nothing passed - returns error
     protected function required($inputName)

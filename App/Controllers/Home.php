@@ -51,7 +51,8 @@ class Home extends \Core\Controller
 	    AjaxValidator::create()->validate([
             'name'=>['required', 'minLength:3'],
             'mail'=>['required', 'minLength:6'],
-            'password'=>['required', 'minLength:6']
+            'password'=>['required', 'minLength:6'],
+            'csrf'=>['csrf']
         ]);
 	    
 	    //saving data to db, if validation succeed
@@ -61,9 +62,10 @@ class Home extends \Core\Controller
     public function submitSecondFormAction()
     {
         FormValidator::create()->validate([
-            'name'=>['required'],
-            'mail'=>['required'],
-            'password'=>['required']
+            'name'=>['required', 'minLength:3'],
+            'mail'=>['required', 'minLength:6'],
+            'password'=>['required', 'minLength:6'],
+            'csrf'=>['csrf']
         ]);
         
         //saving data to db, if validation succeed
