@@ -17,6 +17,12 @@ use Core\HTTP;
 final class AjaxValidator extends HTTP\Response
 {
     #region SERVICE METHODS
+    protected function exceptionHandler() {
+        http_response_code(406);
+        echo json_encode($this->exceptionMessage);
+        exit();
+    }
+    
     protected function errorsHandler() {
         http_response_code(406);
         echo json_encode($this->errors);

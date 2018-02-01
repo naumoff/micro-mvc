@@ -31,6 +31,7 @@ class View
 		$blade = new Blade($views, $cache);
 		
 		$data['csrfInput'] = self::renderFormInputWithCsrfValue();
+		$data['csrfToken'] = self::$csrfToken;
 
 		echo $blade->view()->make($view,$data)->render();
 	}

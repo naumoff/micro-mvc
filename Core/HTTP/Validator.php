@@ -8,7 +8,6 @@
 
 namespace Core\HTTP;
 
-use Core\HTTP\ValidatorException;
 use Core\HTTP\Validators\CoreValidators;
 
 abstract class Validator extends Request {
@@ -16,6 +15,7 @@ abstract class Validator extends Request {
     use CoreValidators;
     
     public $errors = [];
+    public $exceptionMessage = false;
     
     /**
      * Input example:
@@ -29,16 +29,18 @@ abstract class Validator extends Request {
         foreach ($inputsAndRules AS $input => $rulesArray) {
             //check if user's input exists in the rules array
             $this->checkInputExistence($input);
-            $this->validateTroughMethods($input, $rulesArray);
+            
+            if($this->exceptionMessage === false){
+                $this->validateTroughMethods($input, $rulesArray);
+            }
+            
         }
         $this->response();
     }
     
     protected function checkInputExistence(string $input) {
         if (!array_key_exists($input, $this->inputs)) {
-            throw new ValidatorException(
-                "Input {$input} was not found in AjaxValidator " . get_class($this)
-            );
+            $this->exceptionMessage = "Input {$input} was not found in AjaxValidator " . get_class($this);
         }
     }
     
@@ -48,9 +50,7 @@ abstract class Validator extends Request {
         foreach ($rules AS $rule) {
             $rule = explode(':', $rule);
             if (!in_array($rule[0], $class_methods)) {
-                throw new ValidatorException(
-                    "Rule method {$rule[0]} was not found in AjaxValidator " . get_class($this)
-                );
+                $this->exceptionMessage = "Rule method {$rule[0]} was not found in AjaxValidator " . get_class($this);
             } else {
                 $method = $rule[0];
                 $arguments = (isset($rule[1])) ? $rule[1] : null;

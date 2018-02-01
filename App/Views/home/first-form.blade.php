@@ -65,7 +65,7 @@
            	    user: {
            	    	name:'',
                     mail:'',
-                    password:''
+                    password:'',
                 },
                success:{
            	    	message:false
@@ -84,7 +84,8 @@
                         {
                         	name:this.user.name,
 		                    mail:this.user.mail,
-		                    password:this.user.password
+		                    password:this.user.password,
+	                        csrf:'<?= $csrfToken ?>',
                         }
                     ).then(
 		                //1st call back is returning response data

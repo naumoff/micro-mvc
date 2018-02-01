@@ -19,13 +19,21 @@ abstract class Response extends Validator
     
     // responce generator
     protected function response() {
+        if($this->exceptionMessage !== false){
+            $this->exceptionHandler();
+            return;
+        }
+        
         if(count($this->errors)>0){
             $this->errorsHandler();
-        }else{
-            $this->successHandler();
+            return;
         }
+        
+        $this->successHandler();
+        
     }
     
+    abstract protected function exceptionHandler();
     abstract protected function errorsHandler();
     abstract protected function successHandler();
 }

@@ -17,6 +17,12 @@ use Core\HTTP\Response;
 final class FormValidator extends Response
 {
     #region SERVICE METHODS
+    protected function exceptionHandler() {
+        throw new \Exception(
+            $this->exceptionMessage
+        );
+    }
+    
     protected function errorsHandler() {
         $_SESSION['errors']=$this->errors;
         $_SESSION['inputs']=$this->inputs;
