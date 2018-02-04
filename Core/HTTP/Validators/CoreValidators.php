@@ -8,7 +8,6 @@
 
 namespace Core\HTTP\Validators;
 
-use Core\HTTP\ValidatorException;
 
 trait CoreValidators
 {

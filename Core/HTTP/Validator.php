@@ -9,10 +9,11 @@
 namespace Core\HTTP;
 
 use Core\HTTP\Validators\CoreValidators;
+use Core\HTTP\Validators\DatabaseValidators;
 
 abstract class Validator extends Request {
-    // all CORE validators here
-    use CoreValidators;
+    // CORE validators and Database validators
+    use CoreValidators, DatabaseValidators;
     
     public $errors = [];
     public $exceptionMessage = false;
@@ -66,6 +67,8 @@ abstract class Validator extends Request {
                         $this->$method($input, $arguments[0]);
                     } elseif (count($arguments) === 2) {
                         $this->$method($input, $arguments[0], $arguments[1]);
+                    } elseif (count($arguments) === 3) {
+                        $this->$method($input, $arguments[0], $arguments[1], $arguments[2]);
                     }
                 }
             }

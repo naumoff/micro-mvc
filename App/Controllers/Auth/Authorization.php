@@ -24,7 +24,7 @@ class Authorization extends Controller
     {
         $request = AjaxValidator::create()->validate([
             'name'=>['required', 'minLength:3'],
-            'mail'=>['required', 'minLength:6'],
+            'mail'=>['required', 'minLength:6', 'unique:users,email,default'],
             'password'=>['required', 'minLength:6'],
             'csrf'=>['csrf']
         ]);
