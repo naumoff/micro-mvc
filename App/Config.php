@@ -17,24 +17,24 @@ class Config {
 	 * DB host
 	 * @var string
 	 */
-	const DB_HOST = 'localhost';
-	/**
-	 *DB name
-	 * @var string
-	 */
-	const DB_NAME = 'pb_mvc';
-	
-	/**
-	 * DB user
-	 * @var string
-	 */
-	const DB_USER = 'root';
-	
-	/**
-	 * DB pass
-	 * @var string
-	 */
-	const DB_PASS = '';
+    
+    const DB_CONNECTION = [
+        'mysqlConn'=>[
+            'driver'=>'mysql',
+            'credentials'=>[
+                'host'=>'localhost',
+                'db'=>'pb_mvc',
+                'user'=>'root',
+                'password'=>''
+            ]
+        ],
+        'default'=>[
+            'driver'=>'sqlite',
+            'credentials'=>[
+                'path'=>'../Database/sqlite.db'
+            ]
+        ]
+    ];
 	
 	/**
 	 * Development Mode.

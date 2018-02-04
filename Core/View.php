@@ -24,6 +24,7 @@ class View
 	public static function render($view, $data = [])
 	{
 	    self::setCSRF();
+	    
 		$path = dirname(dirname(__File__)).'/App/Views';
 		$views = $path;
 		$cache = $path.'/cache/';

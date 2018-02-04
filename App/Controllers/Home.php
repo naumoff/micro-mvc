@@ -5,6 +5,7 @@
 
 namespace App\Controllers;
 
+use App\Models\Test;
 use App\RequestsHandler\AjaxValidator;
 use App\RequestsHandler\FormValidator;
 use \Core\View;
@@ -28,6 +29,7 @@ class Home extends \Core\Controller
 	#region Main Methods
 	public function indexAction()
     {
+        Test::test();
         View::render('home.index');
 	}
 	

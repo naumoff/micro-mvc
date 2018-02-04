@@ -20,9 +20,7 @@ trait CoreValidators
     {
         $inputValue = $this->inputs[$inputName];
         if($inputValue !== $_SESSION['csrf']){
-            throw new ValidatorException(
-                "CSRF token violation!"
-            );
+            $this->exceptionMessage = "CSRF token violation!";
         }
     }
     
