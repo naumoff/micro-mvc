@@ -20,55 +20,19 @@ trait DatabaseValidators
     
         $sql = "SELECT {$column}
 					FROM {$table}
-					WHERE {$column} = {$inputValue}";
-    
+					WHERE {$column} = '".$inputValue."'";
         try{
             $connection = Model::getDB($connection);
             $statement = $connection->prepare($sql);
             $statement->execute();
-            $userID = $statement->fetch(\PDO::FETCH_ASSOC);
-            var_dump($userID);
-            exit();
-            if($userID !== FALSE){
-                $errorMessage = "User with email <b>{$data['email']}</b> already exists!";
-                return $errorMessage;
-            }else{
-                return false;
+            $result = $statement->fetch(\PDO::FETCH_ASSOC);
+
+            if($result !== FALSE){
+                $message = "Input for {$inputName} already exists in DB!";
+                $this->errorsLogger($inputName, $message);
             }
         }catch(\PDOException $e){
-            echo "We encounter the following problem :". $e->getMessage();
-        }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-
-        $connection = Model::getDb($connection);
-        
-        if(strlen($inputValue) < $min){
-            $message = "Input for {$inputName} must contain minimum of {$min} symbols!";
-            $this->errorsLogger($inputName, $message);
-        }
-    
-        if($inputValue !== $_SESSION['csrf']){
-            $this->exceptionMessage = "CSRF token violation!";
+            $this->exceptionMessage = "We encounter the following problem :". $e->getMessage();
         }
     }
 }
