@@ -11,7 +11,7 @@ namespace Core\HTTP;
 
 abstract class Response extends Validator
 {
-    // late static binding for object creation from classes in App\RequestsHandler
+    // late static binding for object creation from classes in App\RequestsHandlers
     public static function create()
     {
         return new static();

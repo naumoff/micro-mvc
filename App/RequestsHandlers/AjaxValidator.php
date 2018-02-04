@@ -6,13 +6,13 @@
  * Time: 19:30
  */
 
-namespace App\RequestsHandler;
+namespace App\RequestsHandlers;
 
 use Core\HTTP;
 
 /**
  * Class AjaxValidator can contain user-defined validators
- * @package App\RequestsHandler
+ * @package App\RequestsHandlers
  */
 final class AjaxValidator extends HTTP\Response
 {

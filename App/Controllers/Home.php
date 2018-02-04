@@ -5,7 +5,6 @@
 
 namespace App\Controllers;
 
-use App\Models\Test;
 use App\RequestsHandler\AjaxValidator;
 use App\RequestsHandler\FormValidator;
 use \Core\View;

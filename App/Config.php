@@ -18,6 +18,9 @@ class Config {
 	 * @var string
 	 */
     
+    /**
+     * connections to DBs
+     */
     const DB_CONNECTION = [
         'mysqlConn'=>[
             'driver'=>'mysql',

@@ -6,13 +6,13 @@
  * Time: 17:19
  */
 
-namespace App\RequestsHandler;
+namespace App\RequestsHandlers;
 
 use Core\HTTP\Response;
 
 /**
  * Class FormValidator can contain user-defined validators
- * @package App\RequestsHandler
+ * @package App\RequestsHandlers
  */
 final class FormValidator extends Response
 {
