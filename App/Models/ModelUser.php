@@ -12,11 +12,78 @@ use PDO;
  * Class ModelUser
  * @package App\Models
  */
-class ModelUser extends \Core\Model{
+class ModelUser extends Model
+{
 
 	public static $userID;
 	public static $userName;
 	public static $userEmail;
+	
+	#region USER AUTH MANAGMENT
+    /**
+     * function register new user in database
+     * @param $data
+     * @return mixed
+     */
+    public static function userRegistration($data)
+    {
+
+        $sql = "INSERT INTO users
+					(user, email, password, confirm_token, created_at,  updated_at)
+					VALUES (:user, :email, :password, :confirm_token, DateTime('now'), DateTime('now'))";
+    
+    
+        try{
+            
+            $connection = self::getDB();
+            
+            //preparing the query
+            $statement = $connection->prepare($sql);
+        
+            //execute the statement
+            $userAddStatus = $statement->execute(
+                [
+                    ':user'=>$data['user'],
+                    ':email'=>$data['email'],
+                    ':password'=>$data['email'],
+                    ':confirm_token'=>$data['confirm_token'],
+                ]);
+            echo "record added";
+        }catch (\PDOException $e){
+            echo "We encounter the following problem :". $e->getMessage();
+        }
+    }
+    
+    /**
+     * function checks new user email uniqueness.
+     * @param $data
+     * @return bool|string
+     */
+    public static function checkUserEmail($data)
+    {
+        $sql = "SELECT rowid
+					FROM users
+					WHERE email = :email";
+        
+        try{
+            $connection = self::getDB();
+            $statement = $connection->prepare($sql);
+            $statement->bindParam(':email', $data['email']);
+            $statement->execute();
+            $userID = $statement->fetch(PDO::FETCH_ASSOC);
+            var_dump($userID);
+            if($userID !== FALSE){
+                $errorMessage = "User with email <b>{$data['email']}</b> already exists!";
+                return $errorMessage;
+            }else{
+                return false;
+            }
+        }catch(\PDOException $e){
+            echo "We encounter the following problem :". $e->getMessage();
+        }
+
+    }
+    #endregion
 	
 	/**
 	 * function return logged in user id.
@@ -90,48 +157,6 @@ class ModelUser extends \Core\Model{
 		}else{
 			return FALSE;
 		}
-	}
-	
-	/**
-	 * function checks new user email uniqueness.
-	 * @param $data
-	 * @return bool|string
-	 */
-	public static function checkUserEmail($data)
-	{
-		$sql = "SELECT id
-					FROM user
-					WHERE email = :email";
-		
-		$statement = \Core\Model::$db->prepare($sql);
-		$statement->bindParam(':email', $data['email']);
-		$statement->execute();
-		$userID = $statement->fetch(PDO::FETCH_ASSOC);
-		if($userID !== FALSE){
-			$errorMessage = "User with email <b>{$data['email']}</b> already exists!";
-			return $errorMessage;
-		}else{
-			return false;
-		}
-	}
-	
-	/**
-	 * function register new user in database
-	 * @param $data
-	 * @return mixed
-	 */
-	public static function userRegistration($data)
-	{
-		$sql = "INSERT INTO user 
-					(user,email,pass,created)
-					VALUES (:user,:email,:pass,NOW())";
-		$statement = \Core\Model::$db->prepare($sql);
-		$userAddStatus = $statement->execute(array(
-			':user'=>$data['user'],
-			':email'=>$data['email'],
-			':pass'=>$data['pass']
-		));
-		return $userAddStatus;
 	}
 	
 	/**

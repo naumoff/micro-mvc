@@ -36,6 +36,8 @@ abstract class Validator extends Request {
             
         }
         $this->response();
+        
+        return $this;
     }
     
     protected function checkInputExistence(string $input) {

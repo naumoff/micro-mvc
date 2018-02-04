@@ -14,12 +14,12 @@ abstract class Mailer
     protected $to;
     protected $subject;
     
-    protected function to($to)
+    public function to($to)
     {
         $this->to = $to;
     }
     
-    protected function subject($subject)
+    public function subject($subject)
     {
         $this->subject = $subject;
     }

@@ -4,6 +4,15 @@
  */
 $router = new Core\Router();
 
+#region AUTHORIZATION
+$router->addRoute('sign-up', ['controller'=>'Auth\Authorization', 'action'=>'signUp']);
+$router->addRoute('sign-up/handler', ['controller'=>'Auth\Authorization', 'action'=>'signUpHandler']);
+$router->addRoute('login');
+$router->addRoute('recover');
+
+#endregion
+
+#region FRONT
 // add routes section $routerObject->addRoute($url,$params)
 $router->addRoute('', ['controller'=>'Home','action'=>'index']);
 
@@ -12,6 +21,7 @@ $router->addRoute('form-one/submit', ['controller'=>'Home', 'action'=>'submitFir
 
 $router->addRoute('form-two', ['controller'=>'Home','action'=>'secondForm']);
 $router->addRoute('form-two/submit', ['controller'=>'Home', 'action'=>'submitSecondForm']);
+#endregion
 
 /*
 	// precise patterns

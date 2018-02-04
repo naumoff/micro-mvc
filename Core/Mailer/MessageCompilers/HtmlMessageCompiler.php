@@ -10,33 +10,26 @@ namespace Core\Mailer\MessageCompilers;
 
 use Philo\Blade\Blade;
 
-class HtmlMessageCompiler implements MessageCompiler
+class HtmlMessageCompiler extends MessageCompiler
 {
     private $viewName;
     private $params;
     
-    public function __construct($viewName, $params)
+    public function __construct(string $viewName, array $params)
     {
         $this->viewName = $viewName;
         $this->params = $params;
     }
     
-    public function compile() {
-    
-        $path = dirname(dirname(__File__)).'/App/Views/';
+    public function compileMessage()
+    {
+        $path = dirname(__File__, 4).'/App/Views/';
         $views = $path.'/mails/';
         $cache = $path.'/cache/';
-    
+
         $blade = new Blade($views, $cache);
-    
-        return $blade->view()->make($this->viewName,$this->params)->render();
+        
+        return  $blade->view()->make($this->viewName,$this->params)->render();
     }
-    
-    public function headers()
-    {
-        $headers[] = 'MIME-Version: 1.0';
-        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-        $headers[] = 'From: Andrey Naumoff <andrey.naumoff@gmail.com>';
-        return $headers;
-    }
+
 }

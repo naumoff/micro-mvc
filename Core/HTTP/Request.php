@@ -11,7 +11,7 @@ namespace Core\HTTP;
 
 abstract class Request {
     protected $requestType;
-    protected $inputs;
+    public $inputs;
     
     public function __construct() {
         $this->requestType = $_SERVER['REQUEST_METHOD'];

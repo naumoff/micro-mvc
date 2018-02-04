@@ -25,12 +25,12 @@ final class GoogleMailer extends Mailer
     
     protected function message()
     {
-        $this->message = $this->compiler->compile();
-        $this->headers = $this->compiler->headers();
+        $this->message = $this->compiler->compileMessage();
+        $this->headers = $this->compiler->formHeaders();
     }
     
     public function send()
     {
-        mail($this->to, $this->subject, $this->message, implode('\r\n',$this->headers));
+        mail($this->to, $this->subject, $this->message, $this->headers);
     }
 }

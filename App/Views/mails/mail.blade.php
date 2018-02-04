@@ -1,5 +1,9 @@
-@include('mails.inclusions.mail-header', ['title'=>$title])
+<header>
+
+</header>
 
 @yield('content')
 
-@include('mails.inclusions.mail-footer')
+<footer>
+    <h5>Laguna</h5>
+</footer>
