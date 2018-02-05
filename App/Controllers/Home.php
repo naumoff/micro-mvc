@@ -7,7 +7,7 @@ namespace App\Controllers;
 
 use App\RequestsHandlers\AjaxValidator;
 use App\RequestsHandlers\FormValidator;
-use Core\Mailer\GoogleMailer;
+use Core\Mailer\SimpleMailer;
 use Core\Mailer\MessageCompilers\HtmlMessageCompiler;
 use \Core\View;
 
@@ -30,17 +30,8 @@ class Home extends \Core\Controller
 	#region Main Methods
 	public function indexAction()
     {
-//        $compiler = new HtmlMessageCompiler(
-//            'auth.registering',
-//            [
-//                'title'=>'test',
-//                'test'=>'rest'
-//            ]
-//        );
-//        $email = new GoogleMailer($compiler);
-//        $email->to('andrey.naumoff@gmail.com');
-//        $email->subject('test mail');
-//        $email->send();
+        $path = getenv('WEB').'/sign-up/email-verifier?token=53684';
+        var_dump($path);
         View::render('home.index');
 	}
 	

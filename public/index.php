@@ -11,6 +11,9 @@ session_start();
  */
 require '../vendor/autoload.php';
 
+$dotenv = new Dotenv\Dotenv('../');
+$dotenv->load();
+
 /**
  * Autoloader.
  * Function that autoloads files that contains requested Class names

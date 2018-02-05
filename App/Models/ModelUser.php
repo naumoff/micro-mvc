@@ -31,21 +31,16 @@ class ModelUser extends Model
         $sql = "INSERT INTO users
 					(user, email, password, confirm_token, created_at,  updated_at)
 					VALUES (:user, :email, :password, :confirm_token, DateTime('now'), DateTime('now'))";
-    
-    
         try{
-            
             $connection = self::getDB();
-            
             //preparing the query
             $statement = $connection->prepare($sql);
-        
             //execute the statement
-            $userAddStatus = $statement->execute(
+            $statement->execute(
                 [
                     ':user'=>$data['user'],
                     ':email'=>$data['email'],
-                    ':password'=>$data['email'],
+                    ':password'=>$data['password'],
                     ':confirm_token'=>$data['confirm_token'],
                 ]);
             echo "record added";
@@ -54,35 +49,6 @@ class ModelUser extends Model
         }
     }
     
-    /**
-     * function checks new user email uniqueness.
-     * @param $data
-     * @return bool|string
-     */
-    public static function checkUserEmail($data)
-    {
-        $sql = "SELECT rowid
-					FROM users
-					WHERE email = :email";
-        
-        try{
-            $connection = self::getDB();
-            $statement = $connection->prepare($sql);
-            $statement->bindParam(':email', $data['email']);
-            $statement->execute();
-            $userID = $statement->fetch(PDO::FETCH_ASSOC);
-            var_dump($userID);
-            if($userID !== FALSE){
-                $errorMessage = "User with email <b>{$data['email']}</b> already exists!";
-                return $errorMessage;
-            }else{
-                return false;
-            }
-        }catch(\PDOException $e){
-            echo "We encounter the following problem :". $e->getMessage();
-        }
-
-    }
     #endregion
 	
 	/**

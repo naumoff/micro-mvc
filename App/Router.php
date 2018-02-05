@@ -7,6 +7,7 @@ $router = new Core\Router();
 #region AUTHORIZATION
 $router->addRoute('sign-up', ['controller'=>'Auth\Authorization', 'action'=>'signUp']);
 $router->addRoute('sign-up/handler', ['controller'=>'Auth\Authorization', 'action'=>'signUpHandler']);
+$router->addRoute('sign-up/email-verifier', ['controller'=>'Auth\Authorization', 'action'=>'signUpVerifier']);
 $router->addRoute('login');
 $router->addRoute('recover');
 

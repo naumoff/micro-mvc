@@ -11,7 +11,7 @@ namespace Core\Mailer;
 
 use Core\Mailer\MessageCompilers\MessageCompiler;
 
-final class GoogleMailer extends Mailer
+final class SimpleMailer extends Mailer
 {
     private $compiler;
     private $message;

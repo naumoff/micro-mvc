@@ -8,6 +8,9 @@
 
 namespace App\Controllers\Auth;
 
+use App\RequestsHandlers\FormValidator;
+use App\Services\Events\UserRegistration;
+use App\Services\Jobs\SendConfirmRegistrationLetter;
 use Core\Controller;
 use Core\View;
 use App\RequestsHandlers\AjaxValidator;
@@ -15,15 +18,15 @@ use App\Models\ModelUser;
 
 class Authorization extends Controller
 {
-    public function signUp()
+    public function signUpAction()
     {
         View::render('auth.registering');
     }
     
-    public function signUpHandler()
+    public function signUpHandlerAction()
     {
         $request = AjaxValidator::create()->validate([
-            'name'=>['required', 'minLength:3'],
+            'name'=>['required', 'minLength:3', 'unique:users,user,default'],
             'mail'=>['required', 'minLength:6', 'unique:users,email,default'],
             'password'=>['required', 'minLength:6'],
             'csrf'=>['csrf']
@@ -31,11 +34,20 @@ class Authorization extends Controller
 
         $data['user'] = $request->inputs['name'];
         $data['email'] = $request->inputs['mail'];
-        $data['password'] = $request->inputs['password'];
-        $data['confirm_token'] = 'blablacar';
+        $data['password'] = password_hash($request->inputs['password'],PASSWORD_DEFAULT);
+        $data['confirm_token'] = uniqid();
         
-        //saving data to db, if validation succeed
-        ModelUser::userRegistration($data);
-        
+        //saving data to db, sending confirmation request letter
+        UserRegistration::handle($data);
+    }
+    
+    public function signUpVerifierAction()
+    {
+        $request = FormValidator::create();
+        if(isset($request->inputs['token'])){
+            // check presence in db
+        }else{
+            // inform about problem
+        }
     }
 }
